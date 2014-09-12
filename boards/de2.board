@@ -1,0 +1,74 @@
+// SetName
+SetName "DE2 Board"
+SetBackgroundImage "images\bg.png"
+
+AddDeviceGroup "REDLEDS", "out"
+AddDevice "LED", "REDLEDS",  0, "images\redled.png", 355, 236
+AddDevice "LED", "REDLEDS",  1, "images\redled.png", 335, 236
+AddDevice "LED", "REDLEDS",  2, "images\redled.png", 315, 236
+AddDevice "LED", "REDLEDS",  3, "images\redled.png", 295, 236
+AddDevice "LED", "REDLEDS",  4, "images\redled.png", 275, 236
+AddDevice "LED", "REDLEDS",  5, "images\redled.png", 255, 236
+AddDevice "LED", "REDLEDS",  6, "images\redled.png", 235, 236
+AddDevice "LED", "REDLEDS",  8, "images\redled.png", 195, 236
+AddDevice "LED", "REDLEDS",  7, "images\redled.png", 215, 236
+AddDevice "LED", "REDLEDS",  9, "images\redled.png", 175, 236
+AddDevice "LED", "REDLEDS", 10, "images\redled.png", 155, 236
+AddDevice "LED", "REDLEDS", 11, "images\redled.png", 135, 236
+AddDevice "LED", "REDLEDS", 12, "images\redled.png", 115, 236
+AddDevice "LED", "REDLEDS", 13, "images\redled.png",  95, 236
+AddDevice "LED", "REDLEDS", 14, "images\redled.png",  75, 236
+AddDevice "LED", "REDLEDS", 15, "images\redled.png",  55, 236
+AddDevice "LED", "REDLEDS", 16, "images\redled.png",  35, 236
+AddDevice "LED", "REDLEDS", 17, "images\redled.png",  15, 236
+
+AddDeviceGroup "GREENLEDS", "out"
+AddDevice "LED", "GREENLEDS", 0, "images\greenled.png", 474, 152
+AddDevice "LED", "GREENLEDS", 1, "images\greenled.png", 454, 152
+AddDevice "LED", "GREENLEDS", 2, "images\greenled.png", 434, 152
+AddDevice "LED", "GREENLEDS", 3, "images\greenled.png", 414, 152
+AddDevice "LED", "GREENLEDS", 4, "images\greenled.png", 394, 152
+AddDevice "LED", "GREENLEDS", 5, "images\greenled.png", 374, 152
+AddDevice "LED", "GREENLEDS", 6, "images\greenled.png", 354, 152
+AddDevice "LED", "GREENLEDS", 7, "images\greenled.png", 334, 152
+AddDevice "LED", "GREENLEDS", 8, "images\greenled.png", 157, 179
+
+AddDeviceGroup "HEXLOW", "out"
+AddDevice "SSLED", "HEXLOW",  0, "images\7segled.png", 273, 163
+AddDevice "SSLED", "HEXLOW",  7, "images\7segled.png", 242, 163
+AddDevice "SSLED", "HEXLOW", 14, "images\7segled.png", 211, 163
+AddDevice "SSLED", "HEXLOW", 21, "images\7segled.png", 180, 163
+
+AddDeviceGroup "HEXHIGH", "out"
+AddDevice "SSLED", "HEXHIGH",  0, "images\7segled.png", 114, 163
+AddDevice "SSLED", "HEXHIGH",  7, "images\7segled.png",  83, 163
+AddDevice "SSLED", "HEXHIGH", 14, "images\7segled.png",  44, 163
+AddDevice "SSLED", "HEXHIGH", 21, "images\7segled.png",  13, 163
+
+AddDeviceGroup "PUSHBUTTONS", "in"
+AddDevice "PUSH", "PUSHBUTTONS", 0, "images\pushbutton.png", 454, 177
+AddDevice "PUSH", "PUSHBUTTONS", 1, "images\pushbutton.png", 414, 177
+AddDevice "PUSH", "PUSHBUTTONS", 2, "images\pushbutton.png", 374, 177
+AddDevice "PUSH", "PUSHBUTTONS", 3, "images\pushbutton.png", 334, 177
+
+AddDeviceGroup "TOGGLESWITCHES", "in"
+AddDevice "TOGGLE", "TOGGLESWITCHES",  0, "images\toggleswitch.png", 352, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES",  1, "images\toggleswitch.png", 332, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES",  2, "images\toggleswitch.png", 312, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES",  3, "images\toggleswitch.png", 292, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES",  4, "images\toggleswitch.png", 272, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES",  5, "images\toggleswitch.png", 252, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES",  6, "images\toggleswitch.png", 232, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES",  7, "images\toggleswitch.png", 212, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES",  8, "images\toggleswitch.png", 192, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES",  9, "images\toggleswitch.png", 172, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES", 10, "images\toggleswitch.png", 152, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES", 11, "images\toggleswitch.png", 132, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES", 12, "images\toggleswitch.png", 112, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES", 13, "images\toggleswitch.png",  92, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES", 14, "images\toggleswitch.png",  72, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES", 15, "images\toggleswitch.png",  52, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES", 16, "images\toggleswitch.png",  32, 261
+AddDevice "TOGGLE", "TOGGLESWITCHES", 17, "images\toggleswitch.png",  12, 261
+
+AddLCD "LCD", 15, 65

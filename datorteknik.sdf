@@ -1,0 +1,57 @@
+// AddCPU <name>, <reset addr>, <exception addr>, <frequency>
+AddCPU "cpu", 0x800000, 0x800020, 50000000
+
+// AddSDRAM <name>, <base addr>, <span in bytes>
+AddSDRAM "sdram", 0x800000, 0x800000
+
+// AddUART <name>, <base addr>, <span in bytes>, <IRQ>
+AddUART "uart_0", 0x860, 0x20, 4
+AddUART "uart_1", 0x880, 0x20, 5
+AddUART "uart_2", 0xA20, 0x20, 17
+
+// AddJTAG <name>, <base addr>, <span in bytes>, <IRQ>
+AddJTAG "jtag_uart", 0x800, 0x8, 0
+
+// AddLCD <name>, <base addr>, <span in bytes>
+AddLCD "character_lcd", 0x808, 0x8
+
+// AddTimer <name>, <base addr>, <span in bytes>, <frequency>, <period>, <period unit>,
+//          <fixed period (0|1)>, <always run (0|1)>, <has snapshot (0|1)>, <IRQ>
+AddTimer "timer_0",   0x820, 0x20, 50000000, 1,   "ms", 0, 0, 1, 1
+AddTimer "timer100u", 0x900, 0x20, 50000000, 100, "us", 1, 1, 0, 9
+AddTimer "timer_1",   0x920, 0x20, 50000000, 1,   "ms", 0, 0, 1, 10
+AddTimer "timer_2",   0x940, 0x20, 50000000, 1,   "ms", 0, 0, 1, 11
+AddTimer "timer_3",   0x960, 0x20, 50000000, 1,   "ms", 0, 0, 1, 12
+AddTimer "timer_4",   0x980, 0x20, 50000000, 1,   "ms", 0, 0, 1, 13
+AddTimer "timer_5",   0x9A0, 0x20, 50000000, 1,   "ms", 0, 0, 1, 14
+AddTimer "timer_6",   0x9C0, 0x20, 50000000, 1,   "ms", 0, 0, 1, 15
+
+// AddPIO <name>, <base addr>, <span in bytes>, <type (in|out)>, <IRQ>
+AddPIO "redled18",   0x810, 0x10, "out"
+AddPIO "keys4",      0x840, 0x10, "in", 2
+AddPIO "toggles18",  0x850, 0x10, "in", 3
+AddPIO "hex_low28",  0x9F0, 0x10, "out"
+AddPIO "hex_high28", 0xA00, 0x10, "out"
+AddPIO "greenled9",  0xA10, 0x10, "out"
+
+AddPIO "jp1_in1_5",  0x8A0, 0x10, "in", 6
+AddPIO "jp1_in2_8",  0x8B0, 0x10, "in", 7
+AddPIO "jp1_in3_5",  0x8C0, 0x10, "in", 8
+AddPIO "jp1_out1_5", 0x8D0, 0x10, "out"
+AddPIO "jp1_out2_8", 0x8E0, 0x10, "out"
+AddPIO "jp1_out3_5", 0x8F0, 0x10, "out"
+
+// ImportBoard <board filename>
+ImportBoard "boards\de2.board"
+
+// Map <name of device>, <I/O Board identifier>
+Map "jtag_uart",     "JTAG"
+Map "uart_0",        "UART0"
+Map "uart_1",        "UART1"
+Map "redled18",      "REDLEDS"
+Map "keys4", 	     "PUSHBUTTONS"
+Map "toggles18",     "TOGGLESWITCHES"
+Map "hex_low28",     "HEXLOW"
+Map "hex_high28",    "HEXHIGH"
+Map "greenled9",     "GREENLEDS"
+Map "character_lcd", "LCD"
