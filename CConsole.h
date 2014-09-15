@@ -54,17 +54,17 @@ public:
 	
 	GtkWidget *GetWindow() { return window; }
 
-	void Clear();
+	static void Clear(CConsole *self);
 	void AddText(const string& t, bool update = true);
 	void AddText(char *t, bool update = true);
 	void AddText(char t, bool update = true);
 	void Update();
 	bool IsBufferEmpty() { return (buf.length() == 0);};
 	
-	void OnDeleteRange(GtkTextIter *start, GtkTextIter *end);
+	static void OnDeleteRange(GtkTextIter *start, GtkTextIter *end, CConsole *self);
 	void OnInsertText(GtkTextIter *location, gchar *text, gint len);
 	void OnInsertedText(GtkTextIter *location, gchar *text, gint len);
-	gboolean ScrollToBottom();
+	static gboolean ScrollToBottom(CConsole *self);
 };
 
 #endif

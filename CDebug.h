@@ -83,11 +83,11 @@ public:
 	void EnableButtons(void);
 	void DisableButtons(void);
 	
-	void StepInto(void);
-	void StepOver(void);
-	void StepReturn(void);
-	void Continue(void);
-	void StepInstruction(void);
+	static void StepInto(CDebug *self);
+	static void StepOver(CDebug *self);
+	static void StepReturn(CDebug *self);
+	static void Continue(CDebug *self);
+	static void StepInstruction(CDebug *self);
 	
 	void UpdateStatusbar(const char *text);
 	void SetDebuggingState(int state);

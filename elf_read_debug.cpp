@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with NIISim.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cstring>
-#ifndef WINNT
+#ifdef __linux
 #include <elf.h>
 #endif
 
@@ -30,7 +30,7 @@ along with NIISim.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstdio>
 #include <cstdlib>
 
-#ifdef WINNT
+#ifndef __linux
 #include "elf.h"
 #endif
 #include "elf_read_debug.h"

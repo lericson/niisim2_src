@@ -111,14 +111,14 @@ CConsole::~CConsole()
  *
  *  Clears the text in the console
  */
-void CConsole::Clear()
+void CConsole::Clear(CConsole *self)
 {
 	// Empty the text buffed
-	buf = "";
-	is_editing = false;
+	self->buf = "";
+	self->is_editing = false;
 	// Update the console window with no text
 	clicked_on_clear = true;
-	gtk_text_buffer_set_text(text_buffer, "", 0);
+	gtk_text_buffer_set_text(self->text_buffer, "", 0);
 	clicked_on_clear = false;
 }
 
@@ -160,7 +160,7 @@ void CConsole::Init(gboolean (*close_window_function)(gpointer sender, gpointer 
 	
 	if(console_id == CONSOLE_JTAG)
 	{
-		g_signal_connect_swapped(G_OBJECT(text_buffer), "delete-range", G_CALLBACK(&CConsole::OnDeleteRange), this);
+		g_signal_connect_swapped(G_OBJECT(text_buffer), "delete-range", G_CALLBACK(CConsole::OnDeleteRange), this);
 		g_signal_connect(G_OBJECT(text_buffer), "insert-text", G_CALLBACK(insert_text), this);
 		g_signal_connect_after(G_OBJECT(text_buffer), "insert-text", G_CALLBACK(inserted_text), this);
 	}
@@ -172,7 +172,7 @@ void CConsole::Init(gboolean (*close_window_function)(gpointer sender, gpointer 
 	static const char *titles[] = {"JTAG Console", "UART0 Console", "UART1 Console"};
 	gtk_window_set_title(GTK_WINDOW(window), titles[console_id]);
 	
-	g_signal_connect_swapped(G_OBJECT(clear_button), "clicked", G_CALLBACK(&CConsole::Clear), this);
+	g_signal_connect_swapped(G_OBJECT(clear_button), "clicked", G_CALLBACK(CConsole::Clear), this);
 }
 
 /*
@@ -345,28 +345,28 @@ void CConsole::Update()
 	}
 }
 
-gboolean CConsole::ScrollToBottom()
+gboolean CConsole::ScrollToBottom(CConsole *self)
 {
 	gdk_threads_enter();
 	GtkTextIter iter;
-	gtk_text_buffer_get_end_iter(text_buffer, &iter);
-	gtk_text_view_scroll_to_iter(text_view, &iter, 0.0, FALSE, 0, 0);
+	gtk_text_buffer_get_end_iter(self->text_buffer, &iter);
+	gtk_text_view_scroll_to_iter(self->text_view, &iter, 0.0, FALSE, 0, 0);
 	gdk_threads_leave();
 	
 	return FALSE;
 }
 
 // Callback jtag when deleting text in the TextView
-void CConsole::OnDeleteRange(GtkTextIter *start, GtkTextIter *end)
+void CConsole::OnDeleteRange(GtkTextIter *start, GtkTextIter *end, CConsole *self)
 {
 	int start_index, end_index;
 	
-	if(is_editing)
+	if(self->is_editing)
 	{
 		start_index = gtk_text_iter_get_offset(start);
 		end_index = gtk_text_iter_get_offset(end);
 		
-		if(start_index >= edit_start_pos)
+		if(start_index >= self->edit_start_pos)
 		{
 			return;
 		}

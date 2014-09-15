@@ -21,7 +21,7 @@
 #ifndef _ELF_H
 #define	_ELF_H 1
 
-#ifndef WINNT
+#ifdef __linux
 #include <features.h>
 
 __BEGIN_DECLS
@@ -2740,7 +2740,7 @@ typedef Elf32_Addr Elf32_Conflict;
 #define R_M32R_NUM		256	/* Keep this the last entry. */
 
 
-#ifndef WINNT
+#ifdef __linux
 __END_DECLS
 #endif
 

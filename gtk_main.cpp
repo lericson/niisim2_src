@@ -404,12 +404,12 @@ void MenuRunCpu(gpointer sender, gpointer user_data)
 		// It is not running so lets reset the system and start the simulation
 		main_system.Reset();
 		main_system.StartSimulationThread();
-		main_debug.Continue();
+		main_debug.Continue(&main_debug);
 	}
 	else
 	{
 		// Simulation is running so lets unpause it and set it in continue mode
-		main_debug.Continue();
+		main_debug.Continue(&main_debug);
 	}
 	main_debug.EnableButtons();
 	SetSensitiveButtons(false, true, true);
@@ -445,7 +445,7 @@ void MenuPause(gpointer sender, gpointer user_data)
 	if(main_system.IsSimulationRunning() && !main_system.IsSimulationPaused())
 	{
 		//main_system.PauseSimulationThread();
-		main_debug.StepInstruction();
+		main_debug.StepInstruction(&main_debug);
 		gtk_check_menu_item_set_active(debug_window_toggle, TRUE);
 		gtk_widget_set_visible(debug_window, TRUE);
 	}

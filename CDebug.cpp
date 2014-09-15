@@ -103,7 +103,7 @@ struct TabPage
 	pair<int, uint> get_first_valid_breakpoint_line_from_line(int line);
 	
 	TabPage(string filepath, string filename, int file_id);
-	void LineMark(GtkTextIter *iter, GdkEvent *event, GtkSourceView *view, int line0);
+	static void LineMark(GtkTextIter *iter, GdkEvent *event, GtkSourceView *view, int line0, TabPage *self);
 	void SetCurrentExecutingLineMark(int line);
 	void RemoveCurrentExecutingLineMarks(void);
 	
@@ -117,7 +117,7 @@ struct TabPage
 	void ReadSourceFile(void);
 	
 	void RemoveBreakpoints(void);
-	void ClosePage(void);
+	static void ClosePage(TabPage *self);
 	void RemovePage();
 	
 	static TabPage* FindTabPage(int file_id);
@@ -243,7 +243,7 @@ TabPage::TabPage(string filepath, string filename, int file_id)
 	
 	gtk_source_view_set_show_line_numbers(source_view, TRUE);
 	gtk_source_view_set_show_line_marks(source_view, TRUE);
-	g_signal_connect_swapped(G_OBJECT(source_view), "line-mark-activated", G_CALLBACK(&TabPage::LineMark), this);
+	g_signal_connect_swapped(G_OBJECT(source_view), "line-mark-activated", G_CALLBACK(TabPage::LineMark), this);
 	gtk_widget_show(GTK_WIDGET(source_view));
 	
 	// Scrolled window
@@ -255,7 +255,7 @@ TabPage::TabPage(string filepath, string filename, int file_id)
 	GtkWidget *tab_label = gtk_label_new(filename.c_str());
 	
 	GtkWidget *tab_close_button = gtk_button_new();
-	g_signal_connect_swapped(G_OBJECT(tab_close_button), "clicked", G_CALLBACK(&TabPage::ClosePage), this);
+	g_signal_connect_swapped(G_OBJECT(tab_close_button), "clicked", G_CALLBACK(TabPage::ClosePage), this);
 	GdkPixbuf *cross = gdk_pixbuf_new_from_stream(CFile("cross.png").get_input_stream(), NULL, NULL);
 	gtk_container_add(GTK_CONTAINER(tab_close_button), gtk_image_new_from_pixbuf(cross)/*gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_BUTTON)*/);
 	g_object_unref(cross);
@@ -274,17 +274,17 @@ void TabPage::RemoveBreakpoints(void)
 	//for(map<int, GtkSourceMark*>::iterator it = breakpoint_marks.begin(); it != breakpoint_marks.end(); ++it)
 	while(breakpoint_marks.begin() != breakpoint_marks.end())
 	{
-		LineMark(NULL, NULL, NULL, breakpoint_marks.begin()->first-1);
+		LineMark(NULL, NULL, NULL, breakpoint_marks.begin()->first-1, this);
 	}
 }
 
-void TabPage::ClosePage(void)
+void TabPage::ClosePage(TabPage *self)
 {
 	// Remove all breakpoints
-	RemoveBreakpoints();
+	self->RemoveBreakpoints();
 	
 	// Simply hide it rather than removing it
-	Hide();
+	self->Hide();
 }
 
 void TabPage::RemovePage()
@@ -335,7 +335,7 @@ void TabPage::ReadSourceFile(void)
 // Both a callback and a function that gets called when hiding/destructing tab pages
 // When used as callback: iter should be a valid GtkTextIter, line is undefined
 // Otherwise, iter should be NULL and line should contain a correct line
-void TabPage::LineMark(GtkTextIter *iter, GdkEvent *event, GtkSourceView *view, int line)
+void TabPage::LineMark(GtkTextIter *iter, GdkEvent *event, GtkSourceView *view, int line, TabPage *self)
 {
 	// When destroying a tab page, iter is NULL and line already contains the line
 	GtkTextIter iter2;
@@ -346,10 +346,10 @@ void TabPage::LineMark(GtkTextIter *iter, GdkEvent *event, GtkSourceView *view, 
 	else
 	{
 		iter = &iter2;
-		gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(source_buffer), iter, line);
+		gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(self->source_buffer), iter, line);
 	}
 	
-	vector<pair<pair<int, int>, uint> > matching_breakpoints = debug_info.GetMatchingBreakpoints(file_id, line+1);
+	vector<pair<pair<int, int>, uint> > matching_breakpoints = debug_info.GetMatchingBreakpoints(self->file_id, line+1);
 	if(matching_breakpoints.empty())
 		return;
 	
@@ -370,19 +370,19 @@ void TabPage::LineMark(GtkTextIter *iter, GdkEvent *event, GtkSourceView *view, 
 	
 	bool adding;
 	
-	map<int, GtkSourceMark*>::iterator it = breakpoint_marks.find(line);
-	if(it != breakpoint_marks.end())
+	map<int, GtkSourceMark*>::iterator it = self->breakpoint_marks.find(line);
+	if(it != self->breakpoint_marks.end())
 	{
-		gtk_source_buffer_remove_source_marks(source_buffer, iter, iter, "breakpoint");
-		breakpoint_marks.erase(it);
+		gtk_source_buffer_remove_source_marks(self->source_buffer, iter, iter, "breakpoint");
+		self->breakpoint_marks.erase(it);
 		if(remove_breakpoint(matching_breakpoints.front().second))
 			main_debug.SetBreakpoint(matching_breakpoints.front().second);
 		adding = false;
 	}
 	else
 	{
-		GtkSourceMark *mark = gtk_source_buffer_create_source_mark(source_buffer, NULL, "breakpoint", iter);
-		breakpoint_marks.insert(make_pair(line, mark));
+		GtkSourceMark *mark = gtk_source_buffer_create_source_mark(self->source_buffer, NULL, "breakpoint", iter);
+		self->breakpoint_marks.insert(make_pair(line, mark));
 		if(add_breakpoint(matching_breakpoints.front().second))
 			main_debug.SetBreakpoint(matching_breakpoints.front().second);
 		adding = true;
@@ -1079,25 +1079,25 @@ void CDebug::ResumeSimulation(int debug_state, bool save_stack_frame)
 	
 	SetSensitiveButtons(false, true, true);
 }
-void CDebug::StepInto()
+void CDebug::StepInto(CDebug *self)
 {
-	ResumeSimulation(STEP_INTO, false);
+	self->ResumeSimulation(STEP_INTO, false);
 }
-void CDebug::StepOver()
+void CDebug::StepOver(CDebug *self)
 {
-	ResumeSimulation(STEP_OVER, true);
+	self->ResumeSimulation(STEP_OVER, true);
 }
-void CDebug::StepReturn()
+void CDebug::StepReturn(CDebug *self)
 {
-	ResumeSimulation(STEP_RETURN, true);
+	self->ResumeSimulation(STEP_RETURN, true);
 }
-void CDebug::Continue()
+void CDebug::Continue(CDebug *self)
 {
-	ResumeSimulation(CONTINUE, false);
+	self->ResumeSimulation(CONTINUE, false);
 }
-void CDebug::StepInstruction()
+void CDebug::StepInstruction(CDebug *self)
 {
-	ResumeSimulation(STEP_INSTRUCTION, false);
+	self->ResumeSimulation(STEP_INSTRUCTION, false);
 }
 void CDebug::UpdateStatusbar(const char *text)
 {

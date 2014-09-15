@@ -5,7 +5,7 @@ all: gtk_main.o CBoard.o CBoardDevice.o CBoardDeviceGroup.o CConsole.o CCpu.o CJ
 	
 	g++ gtk_main.o CBoard.o CBoardDevice.o CBoardDeviceGroup.o CConsole.o CCpu.o CJtag.o CLcd.o CPio.o \
 	CSdram.o CSystem.o CTimer.o CUart.o CDebug.o CThread.o CFile.o resources.o fileparser.o elf_read_debug.o disassembler.o resource_data.o -o prog \
-	`pkg-config gtk+-2.0 gmodule-2.0 gio-2.0 gthread-2.0 --libs` /usr/lib/libgtksourceview-2.0.so.0
+	`pkg-config gtk+-2.0 gmodule-2.0 gio-2.0 gthread-2.0 gtksourceview-2.0 --libs`
 
 
 CBoard.o: CBoard.cpp

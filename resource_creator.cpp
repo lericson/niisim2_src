@@ -79,7 +79,7 @@ static void escaped_string(const char* str, string& out){
 	out += '"';
 }
 
-#ifdef WINNT
+#ifndef __linux
 #define PERIOD ""
 #define UNDERSCORE "_"
 #else
@@ -87,18 +87,17 @@ static void escaped_string(const char* str, string& out){
 #define UNDERSCORE ""
 #endif
 
-static const char word[] = sizeof(void*) == 8 ? "	.quad	" : "	.long	";
-
 int main(int argc, char *argv[]){
+	const char *word = (sizeof(void*) == 8) ? "	.quad	" : "	.long	";
 	string out =
 	".globl " UNDERSCORE "resource_file_names\n"
-#ifdef WINNT
+#ifndef __posix
 	"	.section	.rdata,\"dr\"\n"
 #else
 	"	.section	.rodata\n"
 #endif
 	"	.align 16\n"
-#ifndef WINNT
+#ifdef __posix
 	"	.type	resource_file_names, @object\n"
 	"	.size	resource_file_names, ";
 	int_to_string(sizeof(void*) * (argc-1+1), out)
@@ -116,7 +115,7 @@ int main(int argc, char *argv[]){
 	out += "0\n";
 	
 	out += ".globl " UNDERSCORE "resource_data\n"
-#ifndef WINNT
+#ifdef __linux
 	"	.type	resource_data, @object\n"
 	"	.size	resource_data, ";
 	int_to_string(sizeof(void*) * (argc-1), out)
@@ -131,7 +130,7 @@ int main(int argc, char *argv[]){
 	}
 	
 	out += ".globl " UNDERSCORE "resource_data_len\n"
-#ifndef WINNT
+#ifdef __posix
 	"	.type	resource_data_len, @object\n"
 	"	.size	resource_data_len, ";
 	int_to_string(sizeof(void*) * (argc-1), out)
@@ -168,7 +167,7 @@ int main(int argc, char *argv[]){
 		out += ":\n";
 	}
 
-#ifndef WINNT
+#ifdef __posix
 	out += "	.section	.note.GNU-stack,\"\",@progbits\n";
 #endif
 	
