@@ -1,0 +1,4 @@
+*.o
+/prog
+/resource_creator
+/resource_data.s
